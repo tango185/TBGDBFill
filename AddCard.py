@@ -1,3 +1,5 @@
+from ttkthemes import themed_tk as tk
+from tkinter import ttk
 from tkinter import *
 from tkinter import messagebox
 from add_card import *
@@ -6,50 +8,50 @@ from check_table import *
 
 class AddCard:
     def __init__(self, win):
-        self.lbl1 = Label(win, text="Tier: ")
-        self.lbl2 = Label(win, text="Name: ")
-        self.lbl3 = Label(win, text="Level: ")
-        self.lbl4 = Label(win, text="M/F: ")
-        self.lbl5 = Label(win, text="POW: ")
-        self.lbl6 = Label(win, text="TGH: ")
-        self.lbl7 = Label(win, text="SPD: ")
-        self.lbl8 = Label(win, text="CHA: ")
-        self.lbl9 = Label(win, text="1st Proc: ")
-        self.lbl10 = Label(win, text="2nd Proc: ")
-        self.lbl11 = Label(win, text="Proc Amount: ")
-        self.lbl12 = Label(win, text="U/D/L/R")
+        self.lbl1 = ttk.Label(win, text="Tier: ")
+        self.lbl2 = ttk.Label(win, text="Name: ")
+        self.lbl3 = ttk.Label(win, text="Level: ")
+        self.lbl4 = ttk.Label(win, text="M/F: ")
+        self.lbl5 = ttk.Label(win, text="POW: ")
+        self.lbl6 = ttk.Label(win, text="TGH: ")
+        self.lbl7 = ttk.Label(win, text="SPD: ")
+        self.lbl8 = ttk.Label(win, text="CHA: ")
+        self.lbl9 = ttk.Label(win, text="1st Proc: ")
+        self.lbl10 = ttk.Label(win, text="2nd Proc: ")
+        self.lbl11 = ttk.Label(win, text="Proc Amount: ")
+        self.lbl12 = ttk.Label(win, text="U/D/L/R")
 
-        self.t1 = Entry()
-        self.t2 = Entry()
-        self.t3 = Entry()
+        self.t1 = ttk.Entry()
+        self.t2 = ttk.Entry()
+        self.t3 = ttk.Entry()
         v0 = IntVar()
         v0.set(1)
-        self.r1 = Radiobutton(win, text="M", variable=v0, value=1)
-        self.r2 = Radiobutton(win, text="F", variable=v0, value=2)
-        self.t4 = Entry()
-        self.t5 = Entry()
-        self.t6 = Entry()
-        self.t7 = Entry()
+        self.r1 = ttk.Radiobutton(win, text="M", variable=v0, value=1)
+        self.r2 = ttk.Radiobutton(win, text="F", variable=v0, value=2)
+        self.t4 = ttk.Entry()
+        self.t5 = ttk.Entry()
+        self.t6 = ttk.Entry()
+        self.t7 = ttk.Entry()
         v1 = IntVar()
         v1.set(1)
-        self.r3 = Radiobutton(win, text="POW", variable=v1, value=1)
-        self.r4 = Radiobutton(win, text="TGH", variable=v1, value=2)
-        self.r5 = Radiobutton(win, text="SPD", variable=v1, value=3)
-        self.r6 = Radiobutton(win, text="CHA", variable=v1, value=4)
+        self.r3 = ttk.Radiobutton(win, text="POW", variable=v1, value=1)
+        self.r4 = ttk.Radiobutton(win, text="TGH", variable=v1, value=2)
+        self.r5 = ttk.Radiobutton(win, text="SPD", variable=v1, value=3)
+        self.r6 = ttk.Radiobutton(win, text="CHA", variable=v1, value=4)
         v2 = IntVar()
         v2.set(2)
-        self.r7 = Radiobutton(win, text="POW", variable=v2, value=1)
-        self.r8 = Radiobutton(win, text="TGH", variable=v2, value=2)
-        self.r9 = Radiobutton(win, text="SPD", variable=v2, value=3)
-        self.r10 = Radiobutton(win, text="CHA", variable=v2, value=4)
-        self.t8 = Entry()
+        self.r7 = ttk.Radiobutton(win, text="POW", variable=v2, value=1)
+        self.r8 = ttk.Radiobutton(win, text="TGH", variable=v2, value=2)
+        self.r9 = ttk.Radiobutton(win, text="SPD", variable=v2, value=3)
+        self.r10 = ttk.Radiobutton(win, text="CHA", variable=v2, value=4)
+        self.t8 = ttk.Entry()
         v3 = IntVar()
         v3.set(1)
-        self.r11 = Radiobutton(win, text="U", variable=v3, value=1)
-        self.r12 = Radiobutton(win, text="D", variable=v3, value=2)
-        self.r13 = Radiobutton(win, text="L", variable=v3, value=3)
-        self.r14 = Radiobutton(win, text="R", variable=v3, value=4)
-        self.b1 = Button(win, text="Add Card", command= lambda: self.get_query(v0, v1, v2, v3))
+        self.r11 = ttk.Radiobutton(win, text="U", variable=v3, value=1)
+        self.r12 = ttk.Radiobutton(win, text="D", variable=v3, value=2)
+        self.r13 = ttk.Radiobutton(win, text="L", variable=v3, value=3)
+        self.r14 = ttk.Radiobutton(win, text="R", variable=v3, value=4)
+        self.b1 = ttk.Button(win, text="Add Card", command= lambda: self.get_query(v0, v1, v2, v3))
 
         self.lbl1.place(x=50, y=25)
         self.t1.place(x=150, y=25)
@@ -129,7 +131,7 @@ class AddCard:
                 arrow = 'R'
 
             query = f"INSERT INTO {self.t1.get().lower()}_card VALUES (" \
-                    f"'{self.t2.get()}', " \
+                    f"\"{self.t2.get()}\", " \
                     f"{self.t3.get()}, " \
                     f"'{gender}', " \
                     f"{self.t4.get()}, " \
