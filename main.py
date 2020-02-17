@@ -1,3 +1,4 @@
+from ttkthemes import themed_tk as tk
 from AddCard import *
 
 window = tk.ThemedTk()

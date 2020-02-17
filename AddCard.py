@@ -1,4 +1,3 @@
-from ttkthemes import themed_tk as tk
 from tkinter import ttk
 from tkinter import *
 from tkinter import messagebox
@@ -17,37 +16,39 @@ class AddCard:
         self.lbl7 = ttk.Label(win, text="CHA: ")
         self.lbl8 = ttk.Label(win, text="1st Ability: ")
         self.lbl9 = ttk.Label(win, text="2nd Ability: ")
-        self.lbl10 = ttk.Label(win, text="U/D/L/R")
+        self.lbl10 = ttk.Label(win, text="Arrow: ")
 
         self.t1 = ttk.Entry()
         self.t2 = ttk.Entry()
-        v0 = IntVar()
-        v0.set(1)
-        self.r1 = ttk.Radiobutton(win, text="M", variable=v0, value=1)
-        self.r2 = ttk.Radiobutton(win, text="F", variable=v0, value=2)
+        self.v0 = IntVar()
+        self.v0.set(1)
+        self.r1 = ttk.Radiobutton(win, text="M", variable=self.v0, value=1)
+        self.r2 = ttk.Radiobutton(win, text="F", variable=self.v0, value=2)
         self.t3 = ttk.Entry()
         self.t4 = ttk.Entry()
         self.t5 = ttk.Entry()
         self.t6 = ttk.Entry()
-        v1 = IntVar()
-        v1.set(1)
-        self.r3 = ttk.Radiobutton(win, text="POW", variable=v1, value=1)
-        self.r4 = ttk.Radiobutton(win, text="TGH", variable=v1, value=2)
-        self.r5 = ttk.Radiobutton(win, text="SPD", variable=v1, value=3)
-        self.r6 = ttk.Radiobutton(win, text="CHA", variable=v1, value=4)
-        v2 = IntVar()
-        v2.set(2)
-        self.r7 = ttk.Radiobutton(win, text="POW", variable=v2, value=1)
-        self.r8 = ttk.Radiobutton(win, text="TGH", variable=v2, value=2)
-        self.r9 = ttk.Radiobutton(win, text="SPD", variable=v2, value=3)
-        self.r10 = ttk.Radiobutton(win, text="CHA", variable=v2, value=4)
-        v3 = IntVar()
-        v3.set(1)
-        self.r11 = ttk.Radiobutton(win, text="U", variable=v3, value=1)
-        self.r12 = ttk.Radiobutton(win, text="D", variable=v3, value=2)
-        self.r13 = ttk.Radiobutton(win, text="L", variable=v3, value=3)
-        self.r14 = ttk.Radiobutton(win, text="R", variable=v3, value=4)
-        self.b1 = ttk.Button(win, text="Add Card", command= lambda: self.get_query(v0, v1, v2, v3))
+        self.v1 = IntVar()
+        self.v1.set(1)
+        self.r3 = ttk.Radiobutton(win, text="POW", variable=self.v1, value=1)
+        self.r4 = ttk.Radiobutton(win, text="TGH", variable=self.v1, value=2)
+        self.r5 = ttk.Radiobutton(win, text="SPD", variable=self.v1, value=3)
+        self.r6 = ttk.Radiobutton(win, text="CHA", variable=self.v1, value=4)
+        self.v2 = IntVar()
+        self.v2.set(2)
+        self.r7 = ttk.Radiobutton(win, text="POW", variable=self.v2, value=1)
+        self.r8 = ttk.Radiobutton(win, text="TGH", variable=self.v2, value=2)
+        self.r9 = ttk.Radiobutton(win, text="SPD", variable=self.v2, value=3)
+        self.r10 = ttk.Radiobutton(win, text="CHA", variable=self.v2, value=4)
+        self.v3 = IntVar()
+        self.v3.set(1)
+        self.r11 = ttk.Radiobutton(win, text="U", variable=self.v3, value=1)
+        self.r12 = ttk.Radiobutton(win, text="D", variable=self.v3, value=2)
+        self.r13 = ttk.Radiobutton(win, text="L", variable=self.v3, value=3)
+        self.r14 = ttk.Radiobutton(win, text="R", variable=self.v3, value=4)
+        # TODO Figure out the Enter button
+        self.b1 = ttk.Button(win, text="Add Card", command=self.get_query)
+        # TODO Add validation functionality
 
         self.lbl1.place(x=50, y=25)
         self.t1.place(x=150, y=25)
@@ -83,54 +84,89 @@ class AddCard:
 
         print(f"{self.t1.get()}")
 
-    def get_query(self, v0, v1, v2, v3):
-        query = f"SELECT * FROM {self.t1.get().lower()}_card WHERE name = '{self.t2.get()}' AND level = {self.t3.get()}"
+    def get_query(self):
+        if self.t1.get() == "" or self.t2.get() == "":
+            messagebox.showwarning(None, "Tip: Enter Tier & Name to check if card exists.")
+        elif self.t3.get() == "" and self.t4.get() == "" and self.t5.get() == "" and self.t6.get() == "":
+            self.check_card("check")
+        elif self.t3.get() == "" or self.t4.get() == "" or self.t5.get() == "" or self.t6.get() == "":
+            messagebox.showwarning(None, "All fields are required for card addition")
+        else:
+            self.check_card("add")
+            self.insert_card()
+
+    def check_card(self, caller):
+        query = f"SELECT * FROM card WHERE tier = '{self.t1.get()}' AND name = '{self.t2.get()}'"
         exist = check_table(query)
 
         if exist:
-            messagebox.showerror("Error", "The card already exists.")
-        else:
-            if v0.get() == 1:
-                gender = 'M'
-            else:
-                gender = 'F'
+            messagebox.showwarning(None, "The card already exists.")
+            self.clear_input()
+        elif not exist and caller == "check":
+            messagebox.showinfo(None, "The card does not exist.")
 
-            if v1.get() == 1:
-                abil_1 = 'POW'
-            elif v1.get() == 2:
-                abil_1 = 'TGH'
-            elif v1.get() == 3:
-                abil_1 = 'SPD'
-            else:
-                abil_1 = 'CHA'
+    def insert_card(self):
+        gender = self.get_gender(self.v0.get())
+        abil_1 = self.get_abil_1(self.v1.get())
+        abil_2 = self.get_abil_2(self.v2.get())
+        arrow = self.get_arrow(self.v3.get())
 
-            if v2.get() == 1:
-                abil_2 = 'POW'
-            elif v2.get() == 2:
-                abil_2 = 'TGH'
-            elif v2.get() == 3:
-                abil_2 = 'SPD'
-            else:
-                abil_2 = 'CHA'
+        query = f"INSERT INTO card VALUES (" \
+                f"'{self.t1.get()}', " \
+                f"\"{self.t2.get()}\", " \
+                f"'{gender}', " \
+                f"{self.t3.get()}, " \
+                f"{self.t4.get()}, " \
+                f"{self.t5.get()}, " \
+                f"{self.t6.get()}, " \
+                f"'{abil_1}', " \
+                f"'{abil_2}', " \
+                f"'{arrow}')"
 
-            if v3.get() == 1:
-                arrow = 'U'
-            elif v3.get() == 2:
-                arrow = 'D'
-            elif v3.get() == 3:
-                arrow = 'L'
-            else:
-                arrow = 'R'
+        add_card(query)
+        messagebox.showinfo(None, "New card created.")
+        self.clear_input()
 
-            query = f"INSERT INTO {self.t1.get().lower()}_card VALUES (" \
-                    f"\"{self.t2.get()}\", " \
-                    f"'{gender}', " \
-                    f"{self.t3.get()}, " \
-                    f"{self.t4.get()}, " \
-                    f"{self.t5.get()}, " \
-                    f"{self.t6.get()}, " \
-                    f"'{abil_1}', " \
-                    f"'{abil_2}', " \
-                    f"'{arrow}')"
+    def get_gender(self, i):
+        switcher = {
+            1: 'M',
+            2: 'F'
+        }
 
-            add_card(query)
+        return switcher.get(i)
+
+    def get_abil_1(self, i):
+        switcher = {
+            1: 'POW',
+            2: 'TGH',
+            3: 'SPD',
+            4: 'CHA'
+        }
+
+        return switcher.get(i)
+
+    def get_abil_2(self, i):
+        switcher = {
+            1: 'POW',
+            2: 'TGH',
+            3: 'SPD',
+            4: 'CHA'
+        }
+
+        return switcher.get(i)
+
+    def get_arrow(self, i):
+        switcher = {
+            1: 'U',
+            2: 'D',
+            3: 'L',
+            4: 'R'
+        }
+
+        return switcher.get(i)
+
+    def clear_input(self):
+        self.t3.delete(0, END)
+        self.t4.delete(0, END)
+        self.t5.delete(0, END)
+        self.t6.delete(0, END)
